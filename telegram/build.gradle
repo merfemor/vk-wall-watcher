@@ -1,18 +1,16 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm'
-    id 'org.springframework.boot'
 }
+
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.8
-
 dependencies {
     implementation libraries.kotlin_stdlib_jdk8
-    implementation libraries.spring_boot_starter
 }
 
 compileKotlin {
