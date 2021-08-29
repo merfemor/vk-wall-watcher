@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.plugin.spring'
 }
 
 sourceCompatibility = 1.8
@@ -10,7 +11,12 @@ repositories {
 }
 
 dependencies {
+//    annotationProcessor(libraries.spring_boot_configuration_processor)
+
     implementation libraries.kotlin_stdlib_jdk8
+    implementation libraries.spring_boot_starter
+    implementation libraries.telegram_bots
+    implementation libraries.telegram_bots_extensions
 }
 
 compileKotlin {

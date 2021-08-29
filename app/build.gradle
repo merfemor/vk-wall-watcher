@@ -13,6 +13,8 @@ sourceCompatibility = 1.8
 dependencies {
     implementation libraries.kotlin_stdlib_jdk8
     implementation libraries.spring_boot_starter
+
+    implementation project(':telegram')
 }
 
 compileKotlin {
