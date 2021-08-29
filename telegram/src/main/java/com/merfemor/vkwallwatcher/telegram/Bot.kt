@@ -7,11 +7,12 @@ import org.telegram.telegrambots.meta.api.objects.Update
 @Component
 internal class Bot(
     private val properties: TelegramProperties,
-    private val nonCommandUpdateProcessor: NonCommandUpdateProcessor
+    private val nonCommandUpdateProcessor: NonCommandUpdateProcessor,
+    messagesFilter: MessagesFilter
 ) : TelegramLongPollingCommandBot() {
 
     init {
-        register(HelpCommand())
+        register(HelpCommand().withFilter(messagesFilter))
     }
 
     override fun getBotToken(): String = properties.botToken
@@ -19,5 +20,5 @@ internal class Bot(
     override fun getBotUsername(): String = properties.botUsername
 
     override fun processNonCommandUpdate(update: Update) =
-        nonCommandUpdateProcessor.process(update)
+        nonCommandUpdateProcessor.process(update, this)
 }
