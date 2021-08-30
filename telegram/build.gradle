@@ -11,8 +11,6 @@ repositories {
 }
 
 dependencies {
-//    annotationProcessor(libraries.spring_boot_configuration_processor)
-
     implementation libraries.kotlin_stdlib_jdk8
     implementation libraries.spring_boot_starter
     implementation libraries.telegram_bots
