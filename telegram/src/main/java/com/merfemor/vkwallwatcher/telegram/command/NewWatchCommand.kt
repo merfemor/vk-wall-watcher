@@ -3,6 +3,8 @@ package com.merfemor.vkwallwatcher.telegram.command
 import com.merfemor.vkwallwatcher.telegram.NonCommandMessagesProcessor
 import com.merfemor.vkwallwatcher.telegram.NonCommandMessagesProcessorHolder
 import com.merfemor.vkwallwatcher.telegram.SendHelper
+import com.merfemor.vkwallwatcher.telegram.data.VkWallWatchSubscription
+import com.merfemor.vkwallwatcher.telegram.data.VkWallWatchSubscriptionRepository
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand
 import org.telegram.telegrambots.meta.api.objects.Chat
@@ -15,7 +17,8 @@ import org.telegram.telegrambots.meta.bots.AbsSender
 internal class NewWatchCommand(
     private val sendHelper: SendHelper,
     private val nonCommandUpdateProcessorHolder: NonCommandMessagesProcessorHolder,
-    private val cancelCommand: CancelCommand
+    private val cancelCommand: CancelCommand,
+    private val vkWallWatchSubscriptionRepository: VkWallWatchSubscriptionRepository
 ) : BotCommand("newwatch", "Creates new VK wall watcher") {
 
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
@@ -30,8 +33,15 @@ internal class NewWatchCommand(
     }
 
     private fun onSuccessEnter(chatId: Long, absSender: AbsSender, communityId: String, keywords: String) {
-        sendHelper.sendTextMessageResponse(chatId, absSender, "You entered \"$communityId\" \"$keywords\"")
-        // TODO: implement store into DB
+        nonCommandUpdateProcessorHolder.setProcessor(chatId, null)
+        val subscription = VkWallWatchSubscription(chatId, communityId, keywords)
+        try {
+            vkWallWatchSubscriptionRepository.save(subscription)
+            sendHelper.sendTextMessageResponse(chatId, absSender, "Successfully subscribed")
+        } catch (e: Throwable) {
+            sendHelper.sendTextMessageResponse(chatId, absSender, "Failed to create subscription")
+            throw e
+        }
     }
 
     private fun removeCancelCommandProcessor(chatId: Long) {

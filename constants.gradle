@@ -7,6 +7,7 @@ ext.versions = [
 ext.libraries = [
         kotlin_stdlib_jdk8: "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
         spring_boot_starter: "org.springframework.boot:spring-boot-starter:${versions.spring_boot}",
+        spring_boot_starter_mongodb: "org.springframework.boot:spring-boot-starter-data-mongodb:${versions.spring_boot}",
         telegram_bots: "org.telegram:telegrambots:${versions.telegram_bots}",
         telegram_bots_extensions: "org.telegram:telegrambotsextensions:${versions.telegram_bots}",
 ]
