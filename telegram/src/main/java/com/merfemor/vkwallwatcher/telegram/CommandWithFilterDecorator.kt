@@ -23,7 +23,7 @@ internal class CommandWithFilterDecorator(
             command.processMessage(absSender, message, arguments)
         } else {
             filter.responseMessageForReject?.let {
-                sendHelper.sendTextMessageResponse(message, absSender, it)
+                sendHelper.sendTextMessageResponse(message.chatId, absSender, it)
             }
         }
     }

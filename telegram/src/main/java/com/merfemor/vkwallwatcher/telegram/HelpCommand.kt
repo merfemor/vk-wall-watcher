@@ -1,9 +1,11 @@
 package com.merfemor.vkwallwatcher.telegram
 
+import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Chat
 import org.telegram.telegrambots.meta.api.objects.User
 
+@Component
 internal class HelpCommand : BaseCommand("help", DESCRIPTION) {
 
     override fun fillMessage(message: SendMessage, user: User, chat: Chat,

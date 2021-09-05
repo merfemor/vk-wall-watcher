@@ -7,18 +7,29 @@ import org.telegram.telegrambots.meta.api.objects.Update
 @Component
 internal class Bot(
     private val properties: TelegramProperties,
-    private val nonCommandUpdateProcessor: NonCommandUpdateProcessor,
-    messagesFilter: MessagesFilter
+    private val sendHelper: SendHelper,
+    private val nonCommandMessagesProcessor: NonCommandMessagesProcessorHolder,
+    private val messagesFilter: MessagesFilter,
+    commandRegistry: CommandRegistry
 ) : TelegramLongPollingCommandBot() {
 
     init {
-        register(HelpCommand().withFilter(messagesFilter))
+        commandRegistry.forEachCommand { register(it.withFilter(messagesFilter)) }
     }
 
     override fun getBotToken(): String = properties.botToken
 
     override fun getBotUsername(): String = properties.botUsername
 
-    override fun processNonCommandUpdate(update: Update) =
-        nonCommandUpdateProcessor.process(update, this)
+    override fun processNonCommandUpdate(update: Update) {
+        val message = update.message
+        if (!messagesFilter.test(message.from)) {
+            messagesFilter.responseMessageForReject?.let {
+                sendHelper.sendTextMessageResponse(message.chatId, this, it)
+            }
+            return
+        }
+        val processor = nonCommandMessagesProcessor.getProcessorForChat(message.chatId)
+        processor.process(update, this)
+    }
 }
