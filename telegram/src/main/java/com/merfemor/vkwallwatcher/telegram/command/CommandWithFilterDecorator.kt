@@ -1,5 +1,7 @@
-package com.merfemor.vkwallwatcher.telegram
+package com.merfemor.vkwallwatcher.telegram.command
 
+import com.merfemor.vkwallwatcher.telegram.MessagesFilter
+import com.merfemor.vkwallwatcher.telegram.SendHelper
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender

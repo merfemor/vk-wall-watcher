@@ -1,4 +1,4 @@
-package com.merfemor.vkwallwatcher.telegram
+package com.merfemor.vkwallwatcher.telegram.command
 
 import org.slf4j.LoggerFactory
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand

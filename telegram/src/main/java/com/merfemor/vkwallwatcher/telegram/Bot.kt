@@ -1,5 +1,7 @@
 package com.merfemor.vkwallwatcher.telegram
 
+import com.merfemor.vkwallwatcher.telegram.command.CommandRegistry
+import com.merfemor.vkwallwatcher.telegram.command.withFilter
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot
 import org.telegram.telegrambots.meta.api.objects.Update

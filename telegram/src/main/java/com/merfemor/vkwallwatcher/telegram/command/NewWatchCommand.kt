@@ -1,5 +1,8 @@
-package com.merfemor.vkwallwatcher.telegram
+package com.merfemor.vkwallwatcher.telegram.command
 
+import com.merfemor.vkwallwatcher.telegram.NonCommandMessagesProcessor
+import com.merfemor.vkwallwatcher.telegram.NonCommandMessagesProcessorHolder
+import com.merfemor.vkwallwatcher.telegram.SendHelper
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand
 import org.telegram.telegrambots.meta.api.objects.Chat
@@ -72,7 +75,8 @@ internal class NewWatchCommand(
 
         private fun askForInput() {
             sendHelper.sendTextMessageResponse(chatId, sender, askForInputText +
-                    "\n" + INFORM_OPTION_TO_CANCEL_TEXT)
+                    "\n" + INFORM_OPTION_TO_CANCEL_TEXT
+            )
         }
 
         private fun sayIncorrectInput() {
