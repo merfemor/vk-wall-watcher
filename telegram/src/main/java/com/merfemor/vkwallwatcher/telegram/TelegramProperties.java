@@ -1,10 +1,9 @@
 package com.merfemor.vkwallwatcher.telegram;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * @implNote not works if written in Kotlin
@@ -12,14 +11,14 @@ import javax.annotation.Nullable;
 @ConstructorBinding
 @ConfigurationProperties(prefix = "telegram")
 class TelegramProperties {
-    @Nonnull
+    @NonNull
     final String botUsername;
-    @Nonnull
+    @NonNull
     final String botToken;
     @Nullable
     final String[] permittedUsernames;
 
-    TelegramProperties(@Nonnull String botUsername, @Nonnull String botToken,
+    TelegramProperties(@NonNull String botUsername, @NonNull String botToken,
                        @Nullable String[] permittedUsernames) {
         this.botUsername = botUsername;
         this.botToken = botToken;

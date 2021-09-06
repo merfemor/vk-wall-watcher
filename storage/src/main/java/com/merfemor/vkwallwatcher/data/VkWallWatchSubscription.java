@@ -1,10 +1,10 @@
 package com.merfemor.vkwallwatcher.data;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.lang.NonNull;
 
 import java.util.Date;
 
@@ -21,7 +21,6 @@ public final class VkWallWatchSubscription {
     @NonNull
     public final String keywords;
     @CreatedDate
-    @NonNull
     public final Date createdDate;
 
     public VkWallWatchSubscription(long chatId, int communityId, @NonNull String keywords) {

@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    implementation libraries.spotbugs_annotations
     api libraries.spring_boot_starter_mongodb
 }
 

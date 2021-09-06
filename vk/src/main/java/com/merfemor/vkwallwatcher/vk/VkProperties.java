@@ -1,8 +1,8 @@
 package com.merfemor.vkwallwatcher.vk;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.lang.NonNull;
 
 @ConfigurationProperties(prefix = "vk")
 @ConstructorBinding

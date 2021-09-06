@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     implementation libraries.kotlin_stdlib_jdk8
+    implementation libraries.spotbugs_annotations
     implementation libraries.spring_boot_starter
     implementation libraries.telegram_bots
     implementation libraries.telegram_bots_extensions
