@@ -11,6 +11,7 @@ ext.libraries = [
         spotbugs_annotations: "com.github.spotbugs:spotbugs-annotations:${versions.spotbugs_annotations}",
         spring_boot_starter: "org.springframework.boot:spring-boot-starter:${versions.spring_boot}",
         spring_boot_starter_mongodb: "org.springframework.boot:spring-boot-starter-data-mongodb:${versions.spring_boot}",
+        spring_boot_starter_validation: "org.springframework.boot:spring-boot-starter-validation:${versions.spring_boot}",
         telegram_bots: "org.telegram:telegrambots:${versions.telegram_bots}",
         telegram_bots_extensions: "org.telegram:telegrambotsextensions:${versions.telegram_bots}",
         vk_api_sdk: "com.vk.api:sdk:${versions.vk_api_sdk}",
