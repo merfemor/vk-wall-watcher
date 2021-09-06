@@ -2,6 +2,7 @@ package com.merfemor.vkwallwatcher.telegram.command
 
 import com.merfemor.vkwallwatcher.data.VkWallWatchSubscription
 import com.merfemor.vkwallwatcher.data.VkWallWatchSubscriptionRepository
+import com.merfemor.vkwallwatcher.telegram.MessageFormatter
 import com.merfemor.vkwallwatcher.telegram.NonCommandMessagesProcessor
 import com.merfemor.vkwallwatcher.telegram.NonCommandMessagesProcessorHolder
 import com.merfemor.vkwallwatcher.telegram.SendHelper
@@ -21,7 +22,8 @@ internal class NewWatchCommand(
     private val nonCommandUpdateProcessorHolder: NonCommandMessagesProcessorHolder,
     private val cancelCommand: CancelCommand,
     private val vkWallWatchSubscriptionRepository: VkWallWatchSubscriptionRepository,
-    private val vkApi: VkApi
+    private val vkApi: VkApi,
+    private val messageFormatter: MessageFormatter
 ) : BotCommand("newwatch", "Creates new VK wall watcher") {
 
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
@@ -49,9 +51,9 @@ internal class NewWatchCommand(
         val subscription = VkWallWatchSubscription(chatId, communityId, query)
         try {
             vkWallWatchSubscriptionRepository.save(subscription)
-            sendHelper.sendTextMessage(chatId, absSender, "Successfully subscribed")
+            sendHelper.sendTextMessage(chatId, absSender, messageFormatter.formatSuccess("Successfully subscribed"))
         } catch (e: Throwable) {
-            sendHelper.sendTextMessage(chatId, absSender, "Failed to create subscription")
+            sendHelper.sendTextMessage(chatId, absSender, messageFormatter.formatError("Failed to create subscription"))
             throw e
         }
     }
@@ -70,7 +72,7 @@ internal class NewWatchCommand(
 
     private inner class InputCommunityIdProcessor(chatId: Long, sender: AbsSender,
                                                   onSuccess: (communityId: Int) -> Unit)
-        : BaseCancellableInputStateMessagesProcessor<Int>(sendHelper, "Input community id", chatId,
+        : BaseCancellableInputStateMessagesProcessor<Int>("Input community id", chatId,
         sender, onSuccess, "Community with such id is not exists or internal error"
     ) {
         override fun transformInput(input: String): Int? {
@@ -80,7 +82,7 @@ internal class NewWatchCommand(
 
     private inner class InputQueryProcessor(chatId: Long, sender: AbsSender,
                                             onSuccess: (keywords: String) -> Unit)
-        : BaseCancellableInputStateMessagesProcessor<String>(sendHelper, "Input query for filter", chatId,
+        : BaseCancellableInputStateMessagesProcessor<String>("Input query for filter", chatId,
         sender, onSuccess) {
 
         override fun transformInput(input: String): String? {
@@ -91,8 +93,7 @@ internal class NewWatchCommand(
         }
     }
 
-    private abstract class BaseCancellableInputStateMessagesProcessor<T>(
-        private val sendHelper: SendHelper,
+    private abstract inner class BaseCancellableInputStateMessagesProcessor<T>(
         private val askForInputText: String,
         private val chatId: Long,
         private val sender: AbsSender,
@@ -111,7 +112,7 @@ internal class NewWatchCommand(
         }
 
         private fun sayIncorrectInput() {
-            sendHelper.sendTextMessage(chatId, sender, inputNotValidText)
+            sendHelper.sendTextMessage(chatId, sender, messageFormatter.formatError(inputNotValidText))
         }
 
         override fun process(update: Update, sender: AbsSender) {
@@ -126,14 +127,11 @@ internal class NewWatchCommand(
         }
 
         abstract fun transformInput(input: String): T?
-
-        private companion object {
-            private const val INFORM_OPTION_TO_CANCEL_TEXT = "You can cancel command with /cancel"
-            private const val WRONG_INPUT_REPEAT_TEXT = "Incorrect input"
-        }
     }
 
     private companion object {
         private val logger = LoggerFactory.getLogger(NewWatchCommand::class.java)
+        private const val INFORM_OPTION_TO_CANCEL_TEXT = "You can cancel command with /cancel"
+        private const val WRONG_INPUT_REPEAT_TEXT = "Incorrect input"
     }
 }

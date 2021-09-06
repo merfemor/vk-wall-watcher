@@ -13,8 +13,8 @@ private val NOTIFICATION_MESSAGE_FMT = """
 """.trimIndent()
 
 private val POST_ROW_FMT = """
-    <b>%d.</b> %s
-    %s
+    %d. %s
+    <a href="%s">🔗 Link</a>
 """.trimIndent()
 
 @Component
@@ -77,7 +77,7 @@ internal class PostNotificationSender(
 
     private companion object {
         private const val TELEGRAM_MAX_MESSAGE_SIZE = 4096
-        private const val MAX_TEXT_LENGTH = 300
+        private const val MAX_TEXT_LENGTH = 100
         private const val MAX_POSTS_IN_MESSAGE = 30
 
         private fun String.ellipsize(maxLength: Int): String {
