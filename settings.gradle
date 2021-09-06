@@ -9,5 +9,6 @@ pluginManagement {
 rootProject.name = 'vk-wall-watcher'
 
 include ':app'
+include ':storage'
 include ':telegram'
 include ':vk'

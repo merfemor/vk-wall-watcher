@@ -1,10 +1,10 @@
 package com.merfemor.vkwallwatcher.telegram.command
 
+import com.merfemor.vkwallwatcher.data.VkWallWatchSubscription
+import com.merfemor.vkwallwatcher.data.VkWallWatchSubscriptionRepository
 import com.merfemor.vkwallwatcher.telegram.NonCommandMessagesProcessor
 import com.merfemor.vkwallwatcher.telegram.NonCommandMessagesProcessorHolder
 import com.merfemor.vkwallwatcher.telegram.SendHelper
-import com.merfemor.vkwallwatcher.telegram.data.VkWallWatchSubscription
-import com.merfemor.vkwallwatcher.telegram.data.VkWallWatchSubscriptionRepository
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand
 import org.telegram.telegrambots.meta.api.objects.Chat

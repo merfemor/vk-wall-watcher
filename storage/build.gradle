@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation libraries.spring_boot_starter_mongodb
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}

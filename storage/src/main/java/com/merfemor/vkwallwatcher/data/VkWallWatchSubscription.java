@@ -1,9 +1,8 @@
-package com.merfemor.vkwallwatcher.telegram.data;
+package com.merfemor.vkwallwatcher.data;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.annotation.Nonnull;
+import org.springframework.lang.NonNull;
 
 /**
  * @implNote mongo fails to create mapper if this class written in Kotlin
@@ -11,20 +10,20 @@ import javax.annotation.Nonnull;
 @Document("subscription")
 public final class VkWallWatchSubscription {
     @Id
-    @Nonnull
+    @NonNull
     public final String id;
     public final long chatId;
-    @Nonnull
+    @NonNull
     public final String communityId;
-    @Nonnull
+    @NonNull
     public final String keywords;
 
-    public VkWallWatchSubscription(long chatId, @Nonnull String communityId, @Nonnull String keywords) {
+    public VkWallWatchSubscription(long chatId, @NonNull String communityId, @NonNull String keywords) {
         this("", chatId, communityId, keywords);
     }
 
-    private VkWallWatchSubscription(@Nonnull String id, long chatId, @Nonnull String communityId,
-                                   @Nonnull String keywords) {
+    private VkWallWatchSubscription(@NonNull String id, long chatId, @NonNull String communityId,
+                                   @NonNull String keywords) {
         this.id = id;
         this.chatId = chatId;
         this.communityId = communityId;

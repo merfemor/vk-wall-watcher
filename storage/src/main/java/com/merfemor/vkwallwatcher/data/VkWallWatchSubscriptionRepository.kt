@@ -1,4 +1,4 @@
-package com.merfemor.vkwallwatcher.telegram.data
+package com.merfemor.vkwallwatcher.data
 
 import org.springframework.data.mongodb.repository.MongoRepository
 
