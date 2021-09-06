@@ -1,15 +1,26 @@
 package com.merfemor.vkwallwatcher.vk
 
+import com.merfemor.vkwallwatcher.data.VkWallWatchSubscription
+import com.merfemor.vkwallwatcher.data.VkWallWatchSubscriptionRepository
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
-internal class ScheduledVkSubscriptionsChecker {
+internal class ScheduledVkSubscriptionsChecker(
+        private val subscriptionRepository: VkWallWatchSubscriptionRepository
+) {
+    private fun processSubscription(subscription: VkWallWatchSubscription) {
+        logger.info("Check subscription ${subscription.communityId}...")
+        // TODO: implement check subscription with count/offset, support filter by date
+    }
+
     @Scheduled(cron = "\${vk.checkScheduleCron}")
     private fun checkSubscriptions() {
-        logger.info("Check subscriptions...")
-        // TODO: implement check subscriptions
+        val subscriptions = subscriptionRepository.findAll()
+        for (subscription in subscriptions) {
+            processSubscription(subscription)
+        }
     }
 
     private companion object {

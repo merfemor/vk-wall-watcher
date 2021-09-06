@@ -17,6 +17,8 @@ dependencies {
         // conflict with spring boot logging
         exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
     }
+
+    implementation project(':storage')
 }
 
 compileKotlin {
