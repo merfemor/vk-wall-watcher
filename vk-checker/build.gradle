@@ -12,14 +12,10 @@ repositories {
 
 dependencies {
     implementation libraries.kotlin_stdlib_jdk8
-    implementation libraries.spotbugs_annotations
     implementation libraries.spring_boot_starter
-    api(libraries.vk_api_sdk) {
-        // conflict with spring boot logging
-        exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
-    }
 
     implementation project(':storage')
+    implementation project(':vk')
 }
 
 compileKotlin {

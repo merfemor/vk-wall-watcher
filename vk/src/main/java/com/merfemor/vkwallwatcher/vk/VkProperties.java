@@ -6,16 +6,16 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConfigurationProperties(prefix = "vk")
 @ConstructorBinding
-class VkProperties {
-    final int appId;
+public class VkProperties {
+    public final int appId;
     @NonNull
-    final String clientSecret;
+    public final String clientSecret;
     @NonNull
-    final String accessToken;
+    public final String accessToken;
     @NonNull
-    final String checkScheduleCron;
+    public final String checkScheduleCron;
 
-    VkProperties(int appId, @NonNull String clientSecret, @NonNull String accessToken,
+    private VkProperties(int appId, @NonNull String clientSecret, @NonNull String accessToken,
                  @NonNull String checkScheduleCron) {
         this.appId = appId;
         this.clientSecret = clientSecret;

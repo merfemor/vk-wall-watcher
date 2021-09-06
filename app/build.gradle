@@ -15,7 +15,7 @@ dependencies {
     implementation libraries.spring_boot_starter
 
     implementation project(':telegram')
-    implementation project(':vk')
+    implementation project(':vk-checker')
 }
 
 compileKotlin {
