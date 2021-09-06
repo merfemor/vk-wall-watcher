@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation libraries.spring_boot_starter_mongodb
+    api libraries.spring_boot_starter_mongodb
 }
 
 compileKotlin {
