@@ -10,3 +10,4 @@ rootProject.name = 'vk-wall-watcher'
 
 include ':app'
 include ':telegram'
+include ':vk'
