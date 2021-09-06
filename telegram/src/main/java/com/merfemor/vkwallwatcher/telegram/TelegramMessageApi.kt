@@ -7,7 +7,9 @@ class TelegramMessageApi internal constructor(
         private val bot: Bot,
         private val sendHelper: SendHelper
 ) {
-    fun sendPlainTextMessage(chatId: Long, messageText: String) {
-        sendHelper.sendTextMessageResponse(chatId, bot, messageText)
+    fun sendTextMessage(chatId: Long, messageText: String,
+                        enableHtml: Boolean = false,
+                        enabledWebPagePreview: Boolean = true) {
+        sendHelper.sendTextMessage(chatId, bot, messageText, enableHtml, enabledWebPagePreview)
     }
 }

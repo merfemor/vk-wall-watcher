@@ -49,9 +49,9 @@ internal class NewWatchCommand(
         val subscription = VkWallWatchSubscription(chatId, communityId, query)
         try {
             vkWallWatchSubscriptionRepository.save(subscription)
-            sendHelper.sendTextMessageResponse(chatId, absSender, "Successfully subscribed")
+            sendHelper.sendTextMessage(chatId, absSender, "Successfully subscribed")
         } catch (e: Throwable) {
-            sendHelper.sendTextMessageResponse(chatId, absSender, "Failed to create subscription")
+            sendHelper.sendTextMessage(chatId, absSender, "Failed to create subscription")
             throw e
         }
     }
@@ -64,7 +64,7 @@ internal class NewWatchCommand(
         cancelCommand.setProcessorForChat(chatId, Runnable {
             removeCancelCommandProcessor(chatId)
             nonCommandUpdateProcessorHolder.setProcessor(chatId, null)
-            sendHelper.sendTextMessageResponse(chatId, absSender, "Canceled")
+            sendHelper.sendTextMessage(chatId, absSender, "Canceled")
         })
     }
 
@@ -105,13 +105,13 @@ internal class NewWatchCommand(
         }
 
         private fun askForInput() {
-            sendHelper.sendTextMessageResponse(chatId, sender, askForInputText +
+            sendHelper.sendTextMessage(chatId, sender, askForInputText +
                     "\n" + INFORM_OPTION_TO_CANCEL_TEXT
             )
         }
 
         private fun sayIncorrectInput() {
-            sendHelper.sendTextMessageResponse(chatId, sender, inputNotValidText)
+            sendHelper.sendTextMessage(chatId, sender, inputNotValidText)
         }
 
         override fun process(update: Update, sender: AbsSender) {

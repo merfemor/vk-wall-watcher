@@ -8,10 +8,24 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
 @Component
 internal class SendHelper {
-    fun sendTextMessageResponse(chatIdLong: Long, sender: AbsSender, responseText: String) {
+    fun sendTextMessage(chatIdLong: Long, sender: AbsSender, plainText: String,
+                        enabledHtml: Boolean = false,
+                        enabledPreview: Boolean = true) {
+        sendTextMessage(chatIdLong, sender) {
+            text = plainText
+            enableHtml(enabledHtml)
+            if (enabledPreview) {
+                enableWebPagePreview()
+            } else {
+                disableWebPagePreview()
+            }
+        }
+    }
+
+    private fun sendTextMessage(chatIdLong: Long, sender: AbsSender, modifier: SendMessage.() -> Unit) {
         val response = SendMessage().apply {
-            text = responseText
             chatId = chatIdLong.toString()
+            modifier()
         }
         try {
             sender.execute(response)

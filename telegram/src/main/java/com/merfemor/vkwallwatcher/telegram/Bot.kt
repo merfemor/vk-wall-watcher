@@ -27,7 +27,7 @@ internal class Bot(
         val message = update.message
         if (!messagesFilter.test(message.from)) {
             messagesFilter.responseMessageForReject?.let {
-                sendHelper.sendTextMessageResponse(message.chatId, this, it)
+                sendHelper.sendTextMessage(message.chatId, this, it)
             }
             return
         }

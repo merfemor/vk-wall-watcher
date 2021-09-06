@@ -25,7 +25,7 @@ internal class CommandWithFilterDecorator(
             command.processMessage(absSender, message, arguments)
         } else {
             filter.responseMessageForReject?.let {
-                sendHelper.sendTextMessageResponse(message.chatId, absSender, it)
+                sendHelper.sendTextMessage(message.chatId, absSender, it)
             }
         }
     }

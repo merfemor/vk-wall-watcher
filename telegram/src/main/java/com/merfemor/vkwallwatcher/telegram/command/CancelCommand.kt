@@ -27,6 +27,6 @@ internal class CancelCommand(
             processor.run()
             return
         }
-        sendHelper.sendTextMessageResponse(chat.id, absSender, "Nothing to cancel")
+        sendHelper.sendTextMessage(chat.id, absSender, "Nothing to cancel")
     }
 }
