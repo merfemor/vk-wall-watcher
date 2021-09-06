@@ -5,6 +5,8 @@ import com.merfemor.vkwallwatcher.data.VkWallWatchSubscriptionRepository
 import com.merfemor.vkwallwatcher.telegram.NonCommandMessagesProcessor
 import com.merfemor.vkwallwatcher.telegram.NonCommandMessagesProcessorHolder
 import com.merfemor.vkwallwatcher.telegram.SendHelper
+import com.merfemor.vkwallwatcher.vk.VkApi
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand
 import org.telegram.telegrambots.meta.api.objects.Chat
@@ -18,7 +20,8 @@ internal class NewWatchCommand(
     private val sendHelper: SendHelper,
     private val nonCommandUpdateProcessorHolder: NonCommandMessagesProcessorHolder,
     private val cancelCommand: CancelCommand,
-    private val vkWallWatchSubscriptionRepository: VkWallWatchSubscriptionRepository
+    private val vkWallWatchSubscriptionRepository: VkWallWatchSubscriptionRepository,
+    private val vkApi: VkApi
 ) : BotCommand("newwatch", "Creates new VK wall watcher") {
 
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
@@ -32,7 +35,16 @@ internal class NewWatchCommand(
         nonCommandUpdateProcessorHolder.setProcessor(chat.id, inputCommunityId)
     }
 
-    private fun onSuccessEnter(chatId: Long, absSender: AbsSender, communityId: String, keywords: String) {
+    private fun getCommunityIdByNameOptional(nameId: String): Int? {
+        return try {
+            vkApi.getGroupIdByNameId(nameId)
+        } catch (th: Throwable) {
+            logger.error("Failed to get community id by name=$nameId", th)
+            null
+        }
+    }
+
+    private fun onSuccessEnter(chatId: Long, absSender: AbsSender, communityId: Int, keywords: String) {
         nonCommandUpdateProcessorHolder.setProcessor(chatId, null)
         val subscription = VkWallWatchSubscription(chatId, communityId, keywords)
         try {
@@ -57,26 +69,35 @@ internal class NewWatchCommand(
     }
 
     private inner class InputCommunityIdProcessor(chatId: Long, sender: AbsSender,
-                                                  onSuccess: (communityId: String) -> Unit)
-        : BaseCancellableInputStateMessagesProcessor(sendHelper, "Input community id", chatId,
-        sender, onSuccess
+                                                  onSuccess: (communityId: Int) -> Unit)
+        : BaseCancellableInputStateMessagesProcessor<Int>(sendHelper, "Input community id", chatId,
+        sender, onSuccess, "Community with such id is not exists or internal error"
     ) {
-        override fun isInputValid(input: String): Boolean = input.isNotEmpty()
+        override fun transformInput(input: String): Int? {
+            return getCommunityIdByNameOptional(input)
+        }
     }
 
     private inner class InputKeywordsProcessor(chatId: Long, sender: AbsSender,
                                                onSuccess: (keywords: String) -> Unit)
-        : BaseCancellableInputStateMessagesProcessor(sendHelper, "Input keywords for filter", chatId,
+        : BaseCancellableInputStateMessagesProcessor<String>(sendHelper, "Input keywords for filter", chatId,
         sender, onSuccess) {
-        override fun isInputValid(input: String): Boolean = input.isNotEmpty()
+
+        override fun transformInput(input: String): String? {
+            if (input.isEmpty()) {
+                return null
+            }
+            return input
+        }
     }
 
-    private abstract class BaseCancellableInputStateMessagesProcessor(
+    private abstract class BaseCancellableInputStateMessagesProcessor<T>(
         private val sendHelper: SendHelper,
         private val askForInputText: String,
         private val chatId: Long,
         private val sender: AbsSender,
-        private val onSuccess: (String) -> Unit
+        private val onSuccess: (T) -> Unit,
+        private val inputNotValidText: String = WRONG_INPUT_REPEAT_TEXT
     ) : NonCommandMessagesProcessor {
 
         init {
@@ -90,24 +111,29 @@ internal class NewWatchCommand(
         }
 
         private fun sayIncorrectInput() {
-            sendHelper.sendTextMessageResponse(chatId, sender, WRONG_INPUT_REPEAT_TEXT)
+            sendHelper.sendTextMessageResponse(chatId, sender, inputNotValidText)
         }
 
         override fun process(update: Update, sender: AbsSender) {
             val input = update.message.text
-            if (isInputValid(input)) {
-                onSuccess.invoke(input)
+            val transformedInput = transformInput(input)
+            if (transformedInput != null) {
+                onSuccess.invoke(transformedInput)
                 return
             }
             sayIncorrectInput()
             askForInput()
         }
 
-        abstract fun isInputValid(input: String) : Boolean
+        abstract fun transformInput(input: String): T?
 
         private companion object {
             private const val INFORM_OPTION_TO_CANCEL_TEXT = "You can cancel command with /cancel"
             private const val WRONG_INPUT_REPEAT_TEXT = "Incorrect input"
         }
+    }
+
+    private companion object {
+        private val logger = LoggerFactory.getLogger(NewWatchCommand::class.java)
     }
 }

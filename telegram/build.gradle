@@ -17,6 +17,7 @@ dependencies {
     implementation libraries.telegram_bots_extensions
 
     implementation project(':storage')
+    implementation project(':vk')
 }
 
 compileKotlin {

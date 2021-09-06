@@ -13,16 +13,15 @@ public final class VkWallWatchSubscription {
     @NonNull
     public final String id;
     public final long chatId;
-    @NonNull
-    public final String communityId;
+    public final int communityId;
     @NonNull
     public final String keywords;
 
-    public VkWallWatchSubscription(long chatId, @NonNull String communityId, @NonNull String keywords) {
+    public VkWallWatchSubscription(long chatId, int communityId, @NonNull String keywords) {
         this("", chatId, communityId, keywords);
     }
 
-    private VkWallWatchSubscription(@NonNull String id, long chatId, @NonNull String communityId,
+    private VkWallWatchSubscription(@NonNull String id, long chatId, int communityId,
                                    @NonNull String keywords) {
         this.id = id;
         this.chatId = chatId;
