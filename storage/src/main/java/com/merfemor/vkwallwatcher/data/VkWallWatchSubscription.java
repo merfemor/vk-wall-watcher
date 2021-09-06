@@ -19,21 +19,21 @@ public final class VkWallWatchSubscription {
     public final long chatId;
     public final int communityId;
     @NonNull
-    public final String keywords;
+    public final String query;
     @CreatedDate
     public final Date createdDate;
 
-    public VkWallWatchSubscription(long chatId, int communityId, @NonNull String keywords) {
-        this("", chatId, communityId, keywords, new Date());
+    public VkWallWatchSubscription(long chatId, int communityId, @NonNull String query) {
+        this("", chatId, communityId, query, new Date());
     }
 
     @PersistenceConstructor
     private VkWallWatchSubscription(@NonNull String id, long chatId, int communityId,
-                                    @NonNull String keywords, @NonNull Date createdDate) {
+                                    @NonNull String query, @NonNull Date createdDate) {
         this.id = id;
         this.chatId = chatId;
         this.communityId = communityId;
-        this.keywords = keywords;
+        this.query = query;
         this.createdDate = createdDate;
     }
 }

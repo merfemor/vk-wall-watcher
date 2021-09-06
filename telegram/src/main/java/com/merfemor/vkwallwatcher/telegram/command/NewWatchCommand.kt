@@ -27,10 +27,10 @@ internal class NewWatchCommand(
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         setupCancelCommand(chat.id, absSender)
         val inputCommunityId = InputCommunityIdProcessor(chat.id, absSender) { communityId ->
-            val inputKeywordsProcessor = InputKeywordsProcessor(chat.id, absSender) { keywords ->
-                onSuccessEnter(chat.id, absSender, communityId, keywords)
+            val inputQueryProcessor = InputQueryProcessor(chat.id, absSender) { query ->
+                onSuccessEnter(chat.id, absSender, communityId, query)
             }
-            nonCommandUpdateProcessorHolder.setProcessor(chat.id, inputKeywordsProcessor)
+            nonCommandUpdateProcessorHolder.setProcessor(chat.id, inputQueryProcessor)
         }
         nonCommandUpdateProcessorHolder.setProcessor(chat.id, inputCommunityId)
     }
@@ -44,9 +44,9 @@ internal class NewWatchCommand(
         }
     }
 
-    private fun onSuccessEnter(chatId: Long, absSender: AbsSender, communityId: Int, keywords: String) {
+    private fun onSuccessEnter(chatId: Long, absSender: AbsSender, communityId: Int, query: String) {
         nonCommandUpdateProcessorHolder.setProcessor(chatId, null)
-        val subscription = VkWallWatchSubscription(chatId, communityId, keywords)
+        val subscription = VkWallWatchSubscription(chatId, communityId, query)
         try {
             vkWallWatchSubscriptionRepository.save(subscription)
             sendHelper.sendTextMessageResponse(chatId, absSender, "Successfully subscribed")
@@ -78,9 +78,9 @@ internal class NewWatchCommand(
         }
     }
 
-    private inner class InputKeywordsProcessor(chatId: Long, sender: AbsSender,
-                                               onSuccess: (keywords: String) -> Unit)
-        : BaseCancellableInputStateMessagesProcessor<String>(sendHelper, "Input keywords for filter", chatId,
+    private inner class InputQueryProcessor(chatId: Long, sender: AbsSender,
+                                            onSuccess: (keywords: String) -> Unit)
+        : BaseCancellableInputStateMessagesProcessor<String>(sendHelper, "Input query for filter", chatId,
         sender, onSuccess) {
 
         override fun transformInput(input: String): String? {
