@@ -19,6 +19,10 @@ class VkApi internal constructor(
         return client.groups().getByIdLegacy(actor).groupId(nameId).execute()[0]
     }
 
+    fun getGroupInfoById(groupId: Int): GetByIdLegacyResponse {
+        return client.groups().getByIdLegacy(actor).groupId(groupId.toString()).execute()[0]
+    }
+
     fun getGroupIdByNameId(nameId: String): Int {
         return getGroupInfoByNameId(nameId).id
     }
@@ -57,6 +61,10 @@ class VkApi internal constructor(
             return result
         }
         return result.filter { Date(it.date.toLong()).after(minDate) }
+    }
+
+    fun getLinkForPost(communityNameId: String, communityId: Int, postId: Int): String {
+        return "vk.com/$communityNameId?w=wall-${communityId}_$postId"
     }
 
     private companion object {
