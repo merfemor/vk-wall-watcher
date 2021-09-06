@@ -15,7 +15,7 @@ internal class ScheduledVkSubscriptionsChecker(
         // TODO: implement check subscription with count/offset, support filter by date
     }
 
-    @Scheduled(cron = "\${vk.checkScheduleCron}")
+    @Scheduled(cron = "\${vk.check_schedule_cron}")
     private fun checkSubscriptions() {
         val subscriptions = subscriptionRepository.findAll()
         for (subscription in subscriptions) {
