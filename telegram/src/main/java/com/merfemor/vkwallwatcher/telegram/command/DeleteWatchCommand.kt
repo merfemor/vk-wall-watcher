@@ -3,7 +3,6 @@ package com.merfemor.vkwallwatcher.telegram.command
 import com.merfemor.vkwallwatcher.data.VkWallWatchSubscriptionRepository
 import com.merfemor.vkwallwatcher.telegram.MessageFormatter
 import com.merfemor.vkwallwatcher.telegram.SendHelper
-import com.merfemor.vkwallwatcher.vk.VkApi
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand
 import org.telegram.telegrambots.meta.api.methods.ParseMode
@@ -15,35 +14,19 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.bots.AbsSender
-
-
-private val SUBSCRIPTION_ITEM_FMT = """
-    %d. %s
-    Query: <i>%s</i>
-""".trimIndent()
+import kotlin.math.abs
 
 
 @Component
 internal class DeleteWatchCommand(
         private val sendHelper: SendHelper,
         private val subscriptionRepository: VkWallWatchSubscriptionRepository,
-        private val vkApi: VkApi,
+        private val subscriptionCommandsHelper: SubscriptionCommandsHelper,
         private val callbackQueryProcessorHolder: CallbackQueryProcessorHolder,
         private val messageFormatter: MessageFormatter
 ) : BotCommand("deletewatch", "Delete vk wall watch") {
 
-    private class SubscriptionInfo(val id: String, val communityName: String, val query: String)
-
-    private fun getSubscriptionsList(chatId: Long): List<SubscriptionInfo> {
-        val subscriptions = subscriptionRepository.findByChatId(chatId)
-        val groupIds = subscriptions.map { it.communityId }
-        val groupNames = vkApi.getGroupInfosById(groupIds).associate { it.id to it.name }
-        return subscriptions.map {
-            SubscriptionInfo(it.id, groupNames[it.communityId]!!, it.query)
-        }
-    }
-
-    private fun buildKeyboard(subs: Collection<SubscriptionInfo>): ReplyKeyboard {
+    private fun buildKeyboard(subs: Collection<SubscriptionCommandsHelper.SubscriptionShortInfo>): ReplyKeyboard {
         return InlineKeyboardMarkup.builder().apply {
             for ((index, sub) in subs.withIndex()) {
                 val button = InlineKeyboardButton.builder()
@@ -61,7 +44,12 @@ internal class DeleteWatchCommand(
     }
 
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<String>) {
-        val subs = getSubscriptionsList(chat.id)
+        val subs = subscriptionCommandsHelper.getSubscriptionsShortInfoList(chat.id)
+        if (subs.isEmpty()) {
+            sendHelper.sendTextMessage(chat.id, absSender, "No active subscriptions")
+            return
+        }
+
         val keyboard = buildKeyboard(subs)
 
         val processor = WatchSelectKeyboardCallbackProcessor(subs)
@@ -70,11 +58,8 @@ internal class DeleteWatchCommand(
         }
         callbackQueryProcessorHolder.registerProcessorForChat(chat.id, processor)
 
-        val textBuilder = StringBuilder("Choose one of the subscriptions or cancel:\n")
-        for ((index, sub) in subs.withIndex()) {
-            textBuilder.append("\n\n")
-                    .append(SUBSCRIPTION_ITEM_FMT.format(index + 1, sub.communityName, sub.query))
-        }
+        val textBuilder = StringBuilder("Choose one of the subscriptions or cancel:\n\n")
+        textBuilder.append(subscriptionCommandsHelper.createSubscriptionsListText(subs))
 
         val msg = SendMessage.builder()
                 .chatId(chat.id.toString())
@@ -87,7 +72,7 @@ internal class DeleteWatchCommand(
     }
 
     private inner class WatchSelectKeyboardCallbackProcessor(
-            private val subscriptions: List<SubscriptionInfo>
+            private val subscriptions: List<SubscriptionCommandsHelper.SubscriptionShortInfo>
     ) : CallbackQueryProcessor {
 
         override fun process(callbackQuery: CallbackQuery, absSender: AbsSender) {
