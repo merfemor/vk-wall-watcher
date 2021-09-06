@@ -5,6 +5,7 @@ import com.merfemor.vkwallwatcher.data.VkWallWatchSubscriptionRepository
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import java.util.Date
 
 @Component
 internal class ScheduledVkSubscriptionsChecker(
@@ -17,9 +18,12 @@ internal class ScheduledVkSubscriptionsChecker(
 
     @Scheduled(cron = "\${vk.check_schedule_cron}")
     private fun checkSubscriptions() {
+        val checkStartDate = Date()
         val subscriptions = subscriptionRepository.findAll()
         for (subscription in subscriptions) {
             processSubscription(subscription)
+            subscription.lastCheckedDate = checkStartDate
+            subscriptionRepository.save(subscription)
         }
     }
 
