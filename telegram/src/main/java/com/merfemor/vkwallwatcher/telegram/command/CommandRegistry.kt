@@ -8,12 +8,14 @@ import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand
 internal class CommandRegistry(
     helpCommand: HelpCommand,
     cancelCommand: CancelCommand,
-    newWatchCommand: NewWatchCommand
+    newWatchCommand: NewWatchCommand,
+    deleteWatchCommand: DeleteWatchCommand
 ) {
     private val commands = arrayOf<IBotCommand>(
         helpCommand,
         cancelCommand,
-        newWatchCommand
+        newWatchCommand,
+        deleteWatchCommand
     )
 
     fun forEachCommand(action: (IBotCommand) -> Unit) = commands.forEach(action)

@@ -19,8 +19,13 @@ class VkApi internal constructor(
         return client.groups().getByIdLegacy(actor).groupId(nameId).execute()[0]
     }
 
+    fun getGroupInfosById(groupIds: Collection<Int>): List<GetByIdLegacyResponse> {
+        val ids = groupIds.map { it.toString() }
+        return client.groups().getByIdLegacy(actor).groupIds(ids).execute()
+    }
+
     fun getGroupInfoById(groupId: Int): GetByIdLegacyResponse {
-        return client.groups().getByIdLegacy(actor).groupId(groupId.toString()).execute()[0]
+        return getGroupInfosById(listOf(groupId))[0]
     }
 
     fun getGroupIdByNameId(nameId: String): Int {
