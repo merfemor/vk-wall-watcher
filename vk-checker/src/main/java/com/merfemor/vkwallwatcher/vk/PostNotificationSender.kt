@@ -6,13 +6,13 @@ import com.vk.api.sdk.objects.wall.WallpostFull
 import org.springframework.stereotype.Component
 
 private val NOTIFICATION_MESSAGE_FMT = """
-    New %s posts in community %s with query "%s":
+    <b>New %s posts in community "%s" with query "%s"</b>
     
     %s
 """.trimIndent()
 
 private val POST_ROW_FMT = """
-    %d. %s
+    <b>%d.</b> %s
     %s
 """.trimIndent()
 
@@ -44,7 +44,8 @@ internal class PostNotificationSender(
             return
         }
         val messageText = constructMessage(subscription.communityId, subscription.query, posts)
-        telegramMessageApi.sendPlainTextMessage(subscription.chatId, messageText)
+        telegramMessageApi.sendTextMessage(subscription.chatId, messageText,
+                enableHtml = true, enabledWebPagePreview = false)
     }
 
     private companion object {
