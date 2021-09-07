@@ -1,0 +1,15 @@
+version: '3'
+services:
+  db:
+    image: mongo
+    container_name: 'db'
+    ports:
+      - 27017:27017
+  app:
+    image: vk-wall-watcher-app
+    container_name: 'app'
+    build: .
+    ports:
+      - 8080:8080
+    links:
+      - db
