@@ -4,12 +4,20 @@ services:
     image: mongo:5.0.2
     container_name: 'db'
     ports:
-      - 27017:27017
+      - "27017:27017"
+    volumes:
+      - vk_wall_watcher_db_volume:/data/db
   app:
-    image: vk-wall-watcher-app
+    image: merfemor/vk-wall-watcher-app:latest
     container_name: 'app'
     build: .
     ports:
-      - 8080:8080
+      - "8080:8080"
     links:
       - db
+    depends_on:
+      - db
+
+volumes:
+  vk_wall_watcher_db_volume:
+    external: true
