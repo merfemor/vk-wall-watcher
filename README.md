@@ -3,13 +3,40 @@
 Telegram bot which gives ability to subscript on VK communities wall 
 posts and be notified through telegram about new posts filtered by some query.
 
-### Configure
+## Configure
 
 Some properties in `application.properties` not stored in Git due to security reasons.
 To override them create `config/application.properties` and setup them.
 
 ## Build
 
-To package application execute `./gradlew bootJar`. To run execute `./gradlew bootRun`.
+To package application execute `./gradlew app:bootJar`. To run execute `./gradlew app:bootRun`.
 
-To run with docker execute `./gradlew bootJar && docker-compose up`.
+To run with docker execute `docker-compose up`.
+
+## Deployment
+
+### Prepare environment
+
+On virtual machine `docker`, `docker-compose` and JDK (needed for gradle build) should be installed. 
+Clone repository (possibly with ssh key setup).
+
+Example of the steps for Ubuntu:
+```bash
+# install docker (TBD add commands)
+
+sudo apt-get install docker-compose openjdk-11-jdk
+
+git pull <repo-path>
+```
+
+### Deploy new version 
+
+Get fresh sources, build and run with following commands:
+```bash
+cd project-dir
+git pull
+./gradlew app:bootJar
+docker-compose down
+docker-compose up
+```
