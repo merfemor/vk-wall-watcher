@@ -6,12 +6,14 @@ import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.util.Date
+import java.util.concurrent.Executor
 
 @Component
 internal class ScheduledVkSubscriptionsChecker(
         private val subscriptionRepository: VkWallWatchSubscriptionRepository,
         private val vkApi: VkApi,
-        private val postNotificationSender: PostNotificationSender
+        private val postNotificationSender: PostNotificationSender,
+        private val executor: Executor
 ) {
 
     private fun processSubscription(subscription: VkWallWatchSubscription) {
@@ -28,7 +30,10 @@ internal class ScheduledVkSubscriptionsChecker(
         logger.info("Start scheduled subscriptions check")
         val subscriptions = subscriptionRepository.findAll()
         for (subscription in subscriptions) {
-            processSubscription(subscription)
+            val task = Runnable {
+                processSubscription(subscription)
+            }.named("SubscriptionCheck-${subscription.id}")
+            executor.execute(task)
         }
     }
 
