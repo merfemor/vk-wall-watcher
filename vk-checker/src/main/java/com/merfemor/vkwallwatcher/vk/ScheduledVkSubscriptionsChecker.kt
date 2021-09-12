@@ -3,6 +3,7 @@ package com.merfemor.vkwallwatcher.vk
 import com.merfemor.vkwallwatcher.data.VkWallWatchSubscription
 import com.merfemor.vkwallwatcher.data.VkWallWatchSubscriptionRepository
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.util.Date
@@ -13,7 +14,7 @@ internal class ScheduledVkSubscriptionsChecker(
         private val subscriptionRepository: VkWallWatchSubscriptionRepository,
         private val vkApi: VkApi,
         private val postNotificationSender: PostNotificationSender,
-        private val executor: Executor
+        @Qualifier(VkCheckerConfiguration.EXECUTOR) private val executor: Executor
 ) {
 
     private fun processSubscription(subscription: VkWallWatchSubscription) {

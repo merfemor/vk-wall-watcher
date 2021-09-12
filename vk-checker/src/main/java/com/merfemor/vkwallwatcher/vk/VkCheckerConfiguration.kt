@@ -7,8 +7,12 @@ import java.util.concurrent.Executors
 
 @Configuration
 class VkCheckerConfiguration {
-    @Bean
+    @Bean(name = [EXECUTOR])
     fun vkCheckerExecutor(): Executor {
         return Executors.newSingleThreadExecutor()
+    }
+
+    companion object {
+        const val EXECUTOR = "vkCheckerExecutor"
     }
 }
