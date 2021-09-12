@@ -5,6 +5,7 @@ import com.vk.api.sdk.client.actors.ServiceActor
 import com.vk.api.sdk.httpclient.HttpTransportClient
 import com.vk.api.sdk.objects.groups.responses.GetByIdLegacyResponse
 import com.vk.api.sdk.objects.wall.WallpostFull
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.util.Date
 
@@ -20,6 +21,7 @@ class VkApi internal constructor(
     }
 
     fun getGroupInfosById(groupIds: Collection<Int>): List<GetByIdLegacyResponse> {
+        logger.debug("get group infos by id: groupIds=$groupIds")
         val ids = groupIds.map { it.toString() }
         return client.groups().getByIdLegacy(actor).groupIds(ids).execute()
     }
@@ -34,6 +36,8 @@ class VkApi internal constructor(
 
     fun searchGroupAllWallPosts(groupId: Int, query: String,
                                 minDate: Date? = null, maxDate: Date? = null): Collection<WallpostFull> {
+        logger.debug("search group wall posts: groupId=$groupId, minDate=$minDate, maxDate=$maxDate")
+
         var offset = 0
         val result = mutableListOf<WallpostFull>()
         while (true) {
@@ -74,5 +78,6 @@ class VkApi internal constructor(
 
     private companion object {
         private const val MAX_COUNT = 100
+        private val logger = LoggerFactory.getLogger(VkApi::class.java)
     }
 }

@@ -18,6 +18,7 @@ internal class ScheduledVkSubscriptionsChecker(
 ) {
 
     private fun processSubscription(subscription: VkWallWatchSubscription) {
+        logger.info("Check subscription ${subscription.id} for chat ${subscription.chatId}, previous check")
         val checkStartDate = Date()
         val minDate: Date = subscription.lastCheckedDate ?: subscription.createdDate
         val posts = vkApi.searchGroupAllWallPosts(subscription.communityId, subscription.query, minDate, checkStartDate)
