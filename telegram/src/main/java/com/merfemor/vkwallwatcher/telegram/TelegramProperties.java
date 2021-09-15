@@ -22,7 +22,7 @@ public class TelegramProperties {
     @NotEmpty
     public final String botToken;
     @CheckForNull
-    public final String[] permittedUsernames;
+    private final String[] permittedUsernames;
     @CheckForNull
     public final String[] adminUsernames;
 
@@ -33,5 +33,10 @@ public class TelegramProperties {
         this.botToken = botToken;
         this.permittedUsernames = permittedUsernames;
         this.adminUsernames = adminUsernames;
+    }
+
+    @CheckForNull
+    public String[] getPermittedUsernames() {
+        return permittedUsernames;
     }
 }
