@@ -10,14 +10,16 @@ internal class CommandRegistry(
     newWatchCommand: NewWatchCommand,
     deleteWatchCommand: DeleteWatchCommand,
     listWatchCommand: ListWatchCommand,
-    adminCommand: AdminCommand
+    adminCommand: AdminCommand,
+    helpCommand: HelpCommand
 ) {
     private val commands = arrayOf<IBotCommand>(
             cancelCommand,
             newWatchCommand,
             deleteWatchCommand,
             listWatchCommand,
-            adminCommand
+            adminCommand,
+            helpCommand
     )
 
     fun forEachCommand(action: (IBotCommand) -> Unit) = commands.forEach(action)

@@ -9,6 +9,7 @@ internal class EmptyNonCommandMessageProcessor(
     private val sendHelper: SendHelper
 ) : NonCommandMessagesProcessor {
     override fun process(update: Update, sender: AbsSender) {
-        sendHelper.sendTextMessage(update.message.chatId, sender, "I don't understand you")
+        sendHelper.sendTextMessage(update.message.chatId, sender,
+                "I don't understand you. Type /help to read information about available commands.")
     }
 }
