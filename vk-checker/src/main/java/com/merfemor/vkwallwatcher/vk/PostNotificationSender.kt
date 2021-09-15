@@ -68,10 +68,10 @@ internal class PostNotificationSender(
 
     fun notifyAboutNewPosts(subscription: VkWallWatchSubscription, posts: Collection<WallpostFull>) {
         if (posts.isEmpty()) {
-            logger.info("No posts to notify in subscription ${subscription.id}")
+            logger.debug("No posts to notify in subscription ${subscription.id}")
             return
         }
-        logger.info("Notifying about ${posts.size} posts in subscription ${subscription.id}")
+        logger.debug("Notifying about ${posts.size} posts in subscription ${subscription.id}")
         for (messageTextPart in constructMessages(subscription.communityId, subscription.query, posts)) {
             telegramMessageApi.sendTextMessage(subscription.chatId, messageTextPart,
                     enableHtml = true, enabledWebPagePreview = false)
