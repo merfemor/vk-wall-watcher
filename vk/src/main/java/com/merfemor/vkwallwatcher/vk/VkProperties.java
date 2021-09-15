@@ -18,8 +18,10 @@ public class VkProperties {
     @NotNull
     public final Integer appId;
     @NotNull
+    @NotEmpty
     public final String clientSecret;
     @NotNull
+    @NotEmpty
     public final String accessToken;
     @NotNull
     @NotEmpty
