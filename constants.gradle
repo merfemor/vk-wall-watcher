@@ -7,6 +7,7 @@ ext.versions = [
 ]
 
 ext.libraries = [
+        kotlin_reflet: "org.jetbrains.kotlin:kotlin-reflect:${versions.kotlin}",
         kotlin_stdlib_jdk8: "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
         spotbugs_annotations: "com.github.spotbugs:spotbugs-annotations:${versions.spotbugs_annotations}",
         spring_boot_starter: "org.springframework.boot:spring-boot-starter:${versions.spring_boot}",

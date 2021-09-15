@@ -12,9 +12,10 @@ internal class PermittedUsersMessagesFilterImpl(
     override val responseMessageForReject = "You shall not pass!"
 
     override fun test(user: User): Boolean {
-        if (properties.permittedUsernames.isNullOrEmpty()) {
+        val usernames = properties.permittedUsernames
+        if (usernames.isNullOrEmpty()) {
             return true
         }
-        return user.userName in properties.permittedUsernames
+        return user.userName in usernames
     }
 }
