@@ -8,6 +8,7 @@ import com.vk.api.sdk.objects.wall.WallpostFull
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.util.Date
+import java.util.concurrent.TimeUnit
 
 @Component
 class VkApi internal constructor(
@@ -51,7 +52,7 @@ class VkApi internal constructor(
         if (maxDate == null) {
             return result
         }
-        return result.filter { Date(it.date.toLong()).before(maxDate) }
+        return result.filter { unixSecondsToDate(it.date).before(maxDate) }
     }
 
     private fun searchGroupWallPostsWithCount(groupId: Int, query: String, minDate: Date? = null,
@@ -70,11 +71,11 @@ class VkApi internal constructor(
                 .execute()
                 .items
 
-        logger.debug("search group wall posts: result size $result")
+        logger.debug("search group wall posts: result size ${result.size}")
         if (minDate == null) {
             return result
         }
-        val filteredResults = result.filter { Date(it.date.toLong()).after(minDate) }
+        val filteredResults = result.filter { unixSecondsToDate(it.date).after(minDate) }
         logger.debug("search group wall posts: result size after filtering ${filteredResults.size}")
         return filteredResults
     }
@@ -86,5 +87,10 @@ class VkApi internal constructor(
     private companion object {
         private const val MAX_COUNT = 100
         private val logger = LoggerFactory.getLogger(VkApi::class.java)
+
+        private fun unixSecondsToDate(unixSeconds: Int): Date {
+            val millis = TimeUnit.SECONDS.toMillis(unixSeconds.toLong())
+            return Date(millis)
+        }
     }
 }
