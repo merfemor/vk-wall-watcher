@@ -1,8 +1,7 @@
 package com.merfemor.vkwallwatcher.telegram
 
 import com.merfemor.vkwallwatcher.telegram.command.CallbackQueryProcessorHolder
-import com.merfemor.vkwallwatcher.telegram.command.CommandRegistry
-import com.merfemor.vkwallwatcher.telegram.command.withFilter
+import com.merfemor.vkwallwatcher.telegram.filter.PermittedUsersMessagesFilterImpl
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery
@@ -14,13 +13,8 @@ internal class Bot(
     private val sendHelper: SendHelper,
     private val nonCommandMessagesProcessor: NonCommandMessagesProcessorHolder,
     private val callbackQueryProcessor: CallbackQueryProcessorHolder,
-    private val messagesFilter: MessagesFilter,
-    commandRegistry: CommandRegistry
+    private val messagesFilter: PermittedUsersMessagesFilterImpl
 ) : TelegramLongPollingCommandBot() {
-
-    init {
-        commandRegistry.forEachCommand { register(it.withFilter(messagesFilter)) }
-    }
 
     override fun getBotToken(): String = properties.botToken
 

@@ -1,7 +1,7 @@
-package com.merfemor.vkwallwatcher.telegram
+package com.merfemor.vkwallwatcher.telegram.filter
 
+import com.merfemor.vkwallwatcher.telegram.TelegramProperties
 import org.springframework.stereotype.Component
-import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.User
 
 @Component

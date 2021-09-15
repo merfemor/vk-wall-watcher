@@ -14,20 +14,24 @@ import javax.validation.constraints.NotNull;
 @ConstructorBinding
 @ConfigurationProperties(prefix = "telegram")
 @Validated
-class TelegramProperties {
+public class TelegramProperties {
     @NotNull
     @NotEmpty
-    final String botUsername;
+    public final String botUsername;
     @NotNull
     @NotEmpty
-    final String botToken;
+    public final String botToken;
     @CheckForNull
-    final String[] permittedUsernames;
+    public final String[] permittedUsernames;
+    @CheckForNull
+    public final String[] adminUsernames;
 
     private TelegramProperties(String botUsername, String botToken,
-                               @CheckForNull String[] permittedUsernames) {
+                               @CheckForNull String[] permittedUsernames,
+                               @CheckForNull String[] adminUsernames) {
         this.botUsername = botUsername;
         this.botToken = botToken;
         this.permittedUsernames = permittedUsernames;
+        this.adminUsernames = adminUsernames;
     }
 }

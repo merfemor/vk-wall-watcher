@@ -27,7 +27,7 @@ internal class VkSubscriptionsCheckJob(
     }
 
     private fun checkSubscriptions() {
-        logger.info("Start scheduled subscriptions check")
+        logger.info("Start subscriptions check")
         val subscriptions = subscriptionRepository.findAll()
         for (subscription in subscriptions) {
             val task = Runnable {

@@ -1,4 +1,4 @@
-package com.merfemor.vkwallwatcher.telegram
+package com.merfemor.vkwallwatcher.telegram.filter
 
 import org.telegram.telegrambots.meta.api.objects.User
 
