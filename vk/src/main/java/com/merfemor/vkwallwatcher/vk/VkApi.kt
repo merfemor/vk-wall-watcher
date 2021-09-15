@@ -4,6 +4,7 @@ import com.vk.api.sdk.client.VkApiClient
 import com.vk.api.sdk.client.actors.ServiceActor
 import com.vk.api.sdk.httpclient.HttpTransportClient
 import com.vk.api.sdk.objects.groups.responses.GetByIdLegacyResponse
+import com.vk.api.sdk.objects.groups.responses.GetByIdObjectLegacyResponse
 import com.vk.api.sdk.objects.wall.WallpostFull
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -16,17 +17,17 @@ class VkApi internal constructor(
     private val client = VkApiClient(HttpTransportClient())
     private val actor = ServiceActor(properties.appId, properties.clientSecret, properties.accessToken)
 
-    private fun getGroupInfoByNameId(nameId: String): GetByIdLegacyResponse {
-        return client.groups().getByIdLegacy(actor).groupId(nameId).execute()[0]
+    private fun getGroupInfoByNameId(nameId: String): GetByIdObjectLegacyResponse {
+        return client.groups().getByIdObjectLegacy(actor).groupId(nameId).execute()[0]
     }
 
-    fun getGroupInfosById(groupIds: Collection<Int>): List<GetByIdLegacyResponse> {
+    fun getGroupInfosById(groupIds: Collection<Int>): List<GetByIdObjectLegacyResponse> {
         logger.debug("get group infos by id: groupIds=$groupIds")
         val ids = groupIds.map { it.toString() }
-        return client.groups().getByIdLegacy(actor).groupIds(ids).execute()
+        return client.groups().getByIdObjectLegacy(actor).groupIds(ids).execute()
     }
 
-    fun getGroupInfoById(groupId: Int): GetByIdLegacyResponse {
+    fun getGroupInfoById(groupId: Int): GetByIdObjectLegacyResponse {
         return getGroupInfosById(listOf(groupId))[0]
     }
 

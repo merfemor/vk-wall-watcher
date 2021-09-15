@@ -2,7 +2,7 @@ package com.merfemor.vkwallwatcher.vk
 
 import com.merfemor.vkwallwatcher.data.VkWallWatchSubscription
 import com.merfemor.vkwallwatcher.telegram.TelegramMessageApi
-import com.vk.api.sdk.objects.groups.responses.GetByIdLegacyResponse
+import com.vk.api.sdk.objects.groups.responses.GetByIdObjectLegacyResponse
 import com.vk.api.sdk.objects.wall.WallpostFull
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -23,7 +23,7 @@ internal class PostNotificationSender(
         private val vkApi: VkApi,
         private val telegramMessageApi: TelegramMessageApi
 ) {
-    private fun constructPostString(postIndex: Int, communityInfo: GetByIdLegacyResponse, post: WallpostFull): String {
+    private fun constructPostString(postIndex: Int, communityInfo: GetByIdObjectLegacyResponse, post: WallpostFull): String {
         val ellipsizedText = post.text.ellipsize(MAX_TEXT_LENGTH)
         val linkToPost = vkApi.getLinkForPost(communityInfo.screenName, communityInfo.id, post.id)
         return POST_ROW_FMT.format(postIndex + 1, ellipsizedText, linkToPost)
