@@ -8,15 +8,3 @@ fun Runnable.named(threadNamePrefix: String): Runnable {
         }
     }
 }
-
-abstract class NamedRunnable(private val threadNamePrefix: String) : Runnable {
-    override fun run() {
-        val thread = Thread.currentThread()
-        val oldName = thread.name
-        thread.name = threadNamePrefix + "_" + oldName
-        execute()
-        thread.name = oldName
-    }
-
-    protected abstract fun execute()
-}

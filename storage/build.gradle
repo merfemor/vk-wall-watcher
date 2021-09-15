@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    runtimeOnly libraries.kotlin_reflet
     implementation libraries.spotbugs_annotations
     api libraries.spring_boot_starter_mongodb
 }

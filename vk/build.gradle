@@ -11,7 +11,6 @@ repositories {
 }
 
 dependencies {
-    runtimeOnly libraries.kotlin_reflet
     implementation libraries.kotlin_stdlib_jdk8
     implementation libraries.spring_boot_starter
     implementation libraries.spring_boot_starter_validation

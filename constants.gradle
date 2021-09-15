@@ -11,7 +11,6 @@ ext.versions = [
 ext.libraries = [
         junit_jupiter_api: "org.junit.jupiter:junit-jupiter-api:${versions.junit}",
         junit_jupiter_engine: "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
-        kotlin_reflet: "org.jetbrains.kotlin:kotlin-reflect:${versions.kotlin}",
         kotlin_stdlib_jdk8: "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
         mockito_kotlin: "org.mockito.kotlin:mockito-kotlin:${versions.mockito_kotlin}",
         spotbugs_annotations: "com.github.spotbugs:spotbugs-annotations:${versions.spotbugs_annotations}",
