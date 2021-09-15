@@ -3,7 +3,6 @@ package com.merfemor.vkwallwatcher.vk
 import com.vk.api.sdk.client.VkApiClient
 import com.vk.api.sdk.client.actors.ServiceActor
 import com.vk.api.sdk.httpclient.HttpTransportClient
-import com.vk.api.sdk.objects.groups.responses.GetByIdLegacyResponse
 import com.vk.api.sdk.objects.groups.responses.GetByIdObjectLegacyResponse
 import com.vk.api.sdk.objects.wall.WallpostFull
 import org.slf4j.LoggerFactory
@@ -60,6 +59,9 @@ class VkApi internal constructor(
         assert(count in 1..100) { "Count must be between 0 and 100, actual $count" }
         assert(offset >= 0) { "Offset must be non-negative, actual $offset" }
 
+        logger.debug("search group wall posts: groupId=$groupId, query=$query, minDate=$minDate" +
+                ", count=$count, offset=$offset")
+
         val id = -groupId // group ids with minuses
         val result = client.wall().search(actor).ownerId(id)
                 .count(count)
@@ -67,10 +69,14 @@ class VkApi internal constructor(
                 .offset(offset)
                 .execute()
                 .items
+
+        logger.debug("search group wall posts: result size $result")
         if (minDate == null) {
             return result
         }
-        return result.filter { Date(it.date.toLong()).after(minDate) }
+        val filteredResults = result.filter { Date(it.date.toLong()).after(minDate) }
+        logger.debug("search group wall posts: result size after filtering ${filteredResults.size}")
+        return filteredResults
     }
 
     fun getLinkForPost(communityNameId: String, communityId: Int, postId: Int): String {
