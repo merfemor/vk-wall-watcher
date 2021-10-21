@@ -28,7 +28,7 @@ internal class Bot(
         }
         val message = update.message
         if (message == null) {
-            log.info("Skip non-message and non callback update {}", message)
+            log.info("Skip non-message and non callback update")
             return
         }
         if (!messagesFilter.test(message.from)) {
